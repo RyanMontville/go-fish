@@ -1,0 +1,82 @@
+main {
+    display: flex;
+    justify-content: space-between;
+}
+
+#messages div {
+    border-bottom: 1px solid black;
+}
+
+.card {
+    width: 47px;
+    height: 70px;
+    border-radius: 10px;
+    border: 1px solid black;
+    display: inline-block;
+    position: relative;
+    margin: 5px;
+}
+
+.top,
+.suit,
+.bottom {
+    position: absolute;
+}
+
+.top {
+    top: 5px;
+    left: 5px;
+}
+
+.bottom {
+    bottom: 5px;
+    right: 5px;
+}
+
+.suit {
+    top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.red {
+    color: red;
+}
+
+#messages {
+    border: 1px solid black;
+    flex-basis: 50%;
+    padding: 10px;
+}
+
+#messages article {
+    padding: 5px;
+    margin-bottom: 5px;
+    width: fit-content;
+}
+
+.left {
+    background-color: #4955ff;
+    color: white;
+    border-radius: 0 15px 15px 15px;
+    margin-right: auto;
+}
+.right {
+    margin-left: auto;
+    background-color: #eaeaea;
+    border-radius: 15px 15px 0 15px;
+    text-align: right;
+}
+
+fieldset {
+    margin: 5px;
+    border-radius: 10px;
+}
+
+fieldset legend {
+    margin-left: 10px;
+}
+
+fieldset span {
+    margin: 10px;
+}
