@@ -1,7 +1,7 @@
 <main>
     <section id="player">
         <h3>Your cards</h3>
-        <div *ngFor="let card of userHand" [ngClass]="checkSuit(card.getSuit())">
+        <div *ngFor="let card of userHand" [ngClass]="checkSuit(card.getSuit())" (click)="userClicksCard(card)">
             <span class="top">{{formatCardRank(card.getRank())}}</span>
             <span class="suit">{{card.getSuit()}}</span>
             <span class="bottom">{{formatCardRank(card.getRank())}}</span>
@@ -11,15 +11,16 @@
         <button *ngFor="let card of userUniqueCards" (click)="addMessage(card)" class="btn">Got any
             {{formatCardRank(card)}}s?</button>
         <hr />
-        <h3>Put pairs aside</h3>
         <fieldset *ngIf="userPairs.length!==0">
             <legend>Your pairs</legend>
-            <span *ngFor="let card of userPairs">{{card.getCard()}}</span>
+            <span *ngFor="let card of userPairs">{{formatCardRank(card)}}</span>
         </fieldset>
         <fieldset *ngIf="programPairs.length!==0">
             <legend>The computer's pairs</legend>
-            <span *ngFor="let card of programPairs">{{card.getCard()}}</span>
+            <span *ngFor="let card of programPairs">{{formatCardRank(card)}}</span>
         </fieldset>
+        <h3>{{userCardsClicked.length}}</h3>
+        <div *ngIf="userHasPair">Looks like you have {{userPairNotification.length}} pair<span *ngIf="userPairNotification.length>1">s</span>! Click on two matching cards to remove.</div>
 
 
     </section>

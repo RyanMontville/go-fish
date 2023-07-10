@@ -10,42 +10,42 @@ import { GameService } from '../game.service';
 export class GameScreenComponent implements OnInit {
   deck: Deck = new Deck;
   userHand: PlayingCard[] = [];
-  userPairs: PlayingCard[] = [];
+  userPairs: number[] = [];
   userUniqueCards: number[] = [];
+  userCardsClicked: PlayingCard[] = [];
+  userPairNotification: number[] = [];
   programHand: PlayingCard[] = [];
-  programPairs: PlayingCard[] = [];
+  programPairs: number[] = [];
   programUniqueCards: number[] = [];
+  userHasPair: boolean = false;
 
   messages: {class: string, text: string}[] = [];
 
   ngOnInit() {
+    this.messages.push({class: 'left',text: 'The game has started!'});
     this.deck.generateDeck();
     for (let i = 0; i < 7; i++) {
       let cardOne: PlayingCard = this.deck.drawCard();
       let cardTwo: PlayingCard = this.deck.drawCard();
       this.userHand.push(cardOne);
       if(this.userUniqueCards.includes(cardOne.getRank())){
-        change this to give the user the chance to remove pairs instead of auto-remove
-        this.userPairs.push(cardOne);
-        let noPairs: PlayingCard[] = this.userHand.filter(card => card.getRank() !== cardOne.getRank());
-        this.userHand = noPairs;
-        let unique: number[] = this.userUniqueCards.filter(number => number !== cardOne.getRank());
-        this.userUniqueCards = unique;
+        this.userHasPair = true;
+        this.userPairNotification.push(cardOne.getRank());
       } else {
         this.userUniqueCards.push(cardOne.getRank());
       }
       this.programHand.push(cardTwo);
       if(this.programUniqueCards.includes(cardTwo.getRank())){
-        this.programPairs.push(cardTwo);
+        this.programPairs.push(cardTwo.getRank());
         let noPairComputer: PlayingCard[] = this.programHand.filter(card => card.getRank() !== cardTwo.getRank());
         this.programHand = noPairComputer;
         let uniqueComputer: number[] = this.programUniqueCards.filter(number => number !== cardTwo.getRank());
         this.programUniqueCards = uniqueComputer;
+        this.messages.push({class: 'left', text: 'I got a pair of ' + this.formatCardRank(cardTwo.getRank()) + 's'});
       } else {
         this.programUniqueCards.push(cardTwo.getRank());
       }
     }
-    this.messages.push({class: 'left',text: 'The game has started!'});
   }
 
   checkSuit(suit: string):string {
@@ -73,6 +73,30 @@ export class GameScreenComponent implements OnInit {
       case 12: return 'Q';
       case 13: return 'K';
       default: return '' + rank + '';
+    }
+  }
+
+  userClicksCard(card: PlayingCard) {
+    this.userCardsClicked.push(card);
+    let findPairs: PlayingCard[] = this.userCardsClicked.filter(currentCard => currentCard.getRank === card.getRank);
+    if(findPairs.length ===2) {
+      let cardOne = findPairs[1];
+      let cardTwo = findPairs[0];
+      let filtered = this.userHand.filter(currCard => currCard.getCard() != cardOne.getCard());
+      this.userHand = filtered;
+      filtered = this.userHand.filter(currCard => currCard.getCard() != cardTwo.getCard());
+      this.userHand = filtered;
+      this.userPairs.push(cardOne.getRank());
+      let filterUnique = this.userUniqueCards.filter(card => card != cardOne.getRank());
+      this.userUniqueCards = filterUnique;
+      let filterNotification = this.userPairNotification.filter(num => num != cardOne.getRank());
+      this.userPairNotification = filterNotification;
+      if(this.userPairNotification.length===0) {
+        this.userHasPair = false;
+      }
+      findPairs = [];
+      this.userCardsClicked = [];
+      this.messages.push({class:'right',text:'I got a pair of ' + this.formatCardRank(cardOne.getRank()) + 's'})
     }
   }
 
