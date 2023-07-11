@@ -2,6 +2,7 @@
     <section id="stats">
         <div *ngIf="cardsRemainingInDeck>0">{{cardsRemainingInDeck}} cards remaining to fish from.</div>
         <div *ngIf="cardsRemainingInDeck===0">There are no cards left to fish from.</div>
+        <div *ngIf="gameOver">GAME OVER</div> {{gameOver}}
     </section>
     <section id="player">
         <h3>Your cards</h3>
@@ -45,7 +46,7 @@
 
 
     </section>
-    <section class="chat-window" style="overflow-y: scroll; height: 300px;" #scrollMe [scrollTop]="scrollMe.scrollHeight">
+    <section class="chat-window" #scroll>
         <article *ngFor="let message of messages" [class]="message.class">{{message.text}}</article>
     </section>
 </main>

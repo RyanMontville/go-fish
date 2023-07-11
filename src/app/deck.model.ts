@@ -8,7 +8,7 @@ export class Deck {
     public generateDeck() {
         let suits: string[] = ['♥', '♠', '♣', '♦'];
         for (let suit of suits) {
-            for (let i = 2; i < 14; i++) {
+            for (let i = 1; i < 14; i++) {
                 let card: PlayingCard = new PlayingCard(i, suit);
                 this.deck.push(card);
             }
