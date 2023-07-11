@@ -18,6 +18,9 @@ export class GameScreenComponent implements OnInit {
   gameOver: boolean = false;
   messages: { class: string, text: string }[] = [];
   playerTurn: string = '';
+  userHasCardProgramIsAskingFor: boolean = false;
+  programChoice: number = 0;
+  cardsRemainingInDeck: number = 0;
 
   ngOnInit() {
     this.messages.push({ class: 'left', text: 'The game has started!' });
@@ -30,6 +33,7 @@ export class GameScreenComponent implements OnInit {
       this.checkProgramUniqueCards(cardTwo.getRank());
     }
     this.playerTurn = 'user';
+    this.cardsRemainingInDeck = this.deck.getDeckSize();
   }
 
   addCardToUserHand(card: PlayingCard) {
@@ -41,6 +45,18 @@ export class GameScreenComponent implements OnInit {
       this.userPairs.push(card.getRank());
       this.messages.push({ class: 'right', text: 'I got 4 ' + this.formatCardRank(card.getRank()) + 's' });
       this.userUniqueCards = this.userUniqueCards.filter(rank => rank != card.getRank());
+    }
+  }
+
+  addCardToProgramHand(card: PlayingCard) {
+    this.programHand.push(card);
+    this.checkProgramUniqueCards(card.getRank());
+    let checkForFour: PlayingCard[] = this.programHand.filter(currentCard => currentCard.getRank() === card.getRank());
+    if (checkForFour.length === 4) {
+      this.programHand = this.programHand.filter(currCard => currCard.getRank() != card.getRank());
+      this.programPairs.push(card.getRank());
+      this.messages.push({ class: 'left', text: 'I got 4 ' + this.formatCardRank(card.getRank()) + 's' });
+      this.programUniqueCards = this.programUniqueCards.filter(rank => rank != card.getRank());
     }
   }
 
@@ -92,10 +108,14 @@ export class GameScreenComponent implements OnInit {
       for (let i = 0; i < matches.length; i++) {
         this.addCardToUserHand(matches[i]);
         this.programHand = this.programHand.filter(matchCard => matchCard.getCard() != matches[i].getCard());
+        this.programUniqueCards = this.programUniqueCards.filter(uniqueMatch => uniqueMatch != card);
       }
     } else {
       this.messages.push({ class: 'left', text: 'No, go fish.' });
-      this.addCardToUserHand(this.deck.drawCard());
+      if(this.cardsRemainingInDeck>0) {
+        this.addCardToUserHand(this.deck.drawCard());
+      }
+      this.cardsRemainingInDeck = this.deck.getDeckSize();
       this.playerTurn = 'program';
       this.programAsk();
     }
@@ -104,9 +124,36 @@ export class GameScreenComponent implements OnInit {
   programAsk() {
     let min = Math.ceil(0);
     let max = Math.floor(this.programUniqueCards.length - 1);
-    let randomNumber = Math.floor(Math.random() * (max - min) + min);
-    alert("Program has " + (this.programUniqueCards.length - 1) + ' unique cards. The random number picked was ' + randomNumber);
-    this.playerTurn = 'user';
+    let randomNumber: number = Math.floor(Math.random() * (max - min) + min);
+    let card: number = this.programUniqueCards[randomNumber];
+    this.programChoice = card;
+    this.messages.push({class: 'left', text: 'Got any ' + this.formatCardRank(card) + 's?'});
+    let userMatch: PlayingCard[] = this.userHand.filter(currentCard => currentCard.getRank() === card);
+    if(userMatch.length>0) {
+      this.userHasCardProgramIsAskingFor = true;
+    } else {
+      this.userHasCardProgramIsAskingFor = false;
+    }
+  }
+
+  userResponse() {
+    if(this.userHasCardProgramIsAskingFor) {
+      let matchedCards: PlayingCard[] = this.userHand.filter(matchCard => matchCard.getRank() === this.programChoice);
+      this.messages.push({class: 'right',text: 'Yes, I have ' + matchedCards.length});
+      for(let i=0;i<matchedCards.length;i++){
+        this.addCardToProgramHand(matchedCards[i]);
+      }
+      this.userHand = this.userHand.filter(currentCard => currentCard.getRank() !== this.programChoice);
+      this.userUniqueCards = this.userUniqueCards.filter(rank => rank !== this.programChoice);
+      this.programAsk()
+    } else {
+      this.messages.push({class: 'right', text: 'No, go fish'});
+      if(this.cardsRemainingInDeck>0){
+        this.addCardToProgramHand(this.deck.drawCard());
+      }
+      this.cardsRemainingInDeck = this.deck.getDeckSize();
+      this.playerTurn = 'user';
+    }
   }
 
   

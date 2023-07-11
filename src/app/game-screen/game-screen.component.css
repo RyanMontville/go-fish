@@ -1,18 +1,24 @@
 main {
-    display: flex;
-    justify-content: space-between;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-template-areas:
+        "stats stats"
+        "player chat"
+    ;
+    gap: 10px;
 }
+/******************* Stats *********************************/
+#stats {
+    grid-area: stats;
+}
+/******************* User **********************************/
 #player {
-    flex-basis: 50%;
+    grid-area: player;
 }
 #user-hand {
     display: flex;
     justify-content: flex-start;
     flex-wrap: wrap;
-}
-
-#messages div {
-    border-bottom: 1px solid black;
 }
 
 .card {
@@ -51,13 +57,32 @@ main {
     color: red;
 }
 
-#messages {
+fieldset {
+    margin: 5px;
+    border-radius: 10px;
+}
+
+fieldset legend {
+    margin-left: 10px;
+}
+
+fieldset span {
+    margin: 10px;
+}
+
+.program-testing {
+    display: flex;
+    gap: 10px;
+}
+
+/******************* Chat Window **********************************/
+.chat-window {
     border: 1px solid black;
-    flex-basis: 50%;
+    grid-area: chat;
     padding: 10px;
 }
 
-#messages article {
+.chat-window article {
     padding: 5px;
     margin-bottom: 5px;
     width: fit-content;
@@ -74,17 +99,4 @@ main {
     background-color: #eaeaea;
     border-radius: 15px 15px 0 15px;
     text-align: right;
-}
-
-fieldset {
-    margin: 5px;
-    border-radius: 10px;
-}
-
-fieldset legend {
-    margin-left: 10px;
-}
-
-fieldset span {
-    margin: 10px;
 }

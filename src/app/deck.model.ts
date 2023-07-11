@@ -48,12 +48,6 @@ export class Deck {
         this.deck = [];
     }
 
-    returnDeck(): PlayingCard[] {
-        let deckToReturn = this.deck;
-        this.clearDeck();
-        return deckToReturn;
-    }
-
     getDeck(): PlayingCard[] {
         return this.deck;
     }

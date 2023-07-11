@@ -1,4 +1,8 @@
 <main>
+    <section id="stats">
+        <div *ngIf="cardsRemainingInDeck>0">{{cardsRemainingInDeck}} cards remaining to fish from.</div>
+        <div *ngIf="cardsRemainingInDeck===0">There are no cards left to fish from.</div>
+    </section>
     <section id="player">
         <h3>Your cards</h3>
         <section id="user-hand">
@@ -15,7 +19,9 @@
             {{formatCardRank(card)}}s?</button>
         </article>
         <article *ngIf="playerTurn==='program'">
-            Program's turn
+            <h3>Respond to the computer</h3>
+            <button *ngIf="userHasCardProgramIsAskingFor" class="btn green" (click)="userResponse()">Yes</button>
+            <button *ngIf="!userHasCardProgramIsAskingFor" class="btn red-btn" (click)="userResponse()">No, go fish</button>
         </article>
         <hr />
         <fieldset *ngIf="userPairs.length!==0">
@@ -26,11 +32,20 @@
             <legend>The computer's pairs</legend>
             <span *ngFor="let card of programPairs">{{formatCardRank(card)}}</span>
         </fieldset>
-        <div *ngFor="let card of programHand">{{formatCardRank(card.getRank())}}</div>
+        <hr />
+        <fieldset class="program-testing">
+            <legend>Program hand</legend>
+            <div *ngFor="let card of programHand">{{card.getCard()}}</div>
+        </fieldset>
+        <fieldset class="program-testing">
+            <legend>Program unique cards</legend>
+            <div *ngFor="let card of programUniqueCards">{{formatCardRank(card)}}</div>
+        </fieldset>
+        
 
 
     </section>
-    <section id="messages" #scrollMe style="overflow: scroll; height: 300px;" [scrollTop]="scrollMe.scrollHeight">
+    <section class="chat-window" style="overflow-y: scroll; height: 300px;" #scrollMe [scrollTop]="scrollMe.scrollHeight">
         <article *ngFor="let message of messages" [class]="message.class">{{message.text}}</article>
     </section>
 </main>
