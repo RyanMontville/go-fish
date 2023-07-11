@@ -2,6 +2,14 @@ main {
     display: flex;
     justify-content: space-between;
 }
+#player {
+    flex-basis: 50%;
+}
+#user-hand {
+    display: flex;
+    justify-content: flex-start;
+    flex-wrap: wrap;
+}
 
 #messages div {
     border-bottom: 1px solid black;
