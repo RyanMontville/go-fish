@@ -1,8 +1,11 @@
 <main>
     <section id="stats">
-        <div *ngIf="cardsRemainingInDeck>0">{{cardsRemainingInDeck}} cards remaining to fish from.</div>
-        <div *ngIf="cardsRemainingInDeck===0">There are no cards left to fish from.</div>
-        <div *ngIf="gameOver">GAME OVER</div> {{gameOver}}
+        <span *ngIf="cardsRemainingInDeck>0">{{cardsRemainingInDeck}} cards remaining to fish from. | </span>
+        <span *ngIf="cardsRemainingInDeck===0">There are no cards left to fish from. | </span>
+        <span *ngIf="gameOver">GAME OVER</span> {{gameOver}} |
+        <span>User Hand: {{userHand.length}} | </span>
+        <span>Program Hand: {{programHand.length}}</span>
+        <span>| {{playerTurn}}</span>
     </section>
     <section id="player">
         <h3>Your cards</h3>
@@ -16,13 +19,14 @@
         <hr />
         <article *ngIf="playerTurn==='user'">
             <h3>Ask the computer</h3>
-        <button *ngFor="let card of userUniqueCards" (click)="userAsk(card)" class="btn">Got any
-            {{formatCardRank(card)}}s?</button>
+            <button *ngFor="let card of userUniqueCards" (click)="userAsk(card)" class="btn">Got any
+                {{formatCardRank(card)}}s?</button>
         </article>
         <article *ngIf="playerTurn==='program'">
             <h3>Respond to the computer</h3>
             <button *ngIf="userHasCardProgramIsAskingFor" class="btn green" (click)="userResponse()">Yes</button>
-            <button *ngIf="!userHasCardProgramIsAskingFor" class="btn red-btn" (click)="userResponse()">No, go fish</button>
+            <button *ngIf="!userHasCardProgramIsAskingFor" class="btn red-btn" (click)="userResponse()">No, go
+                fish</button>
         </article>
         <hr />
         <fieldset *ngIf="userPairs.length!==0">
@@ -42,11 +46,13 @@
             <legend>Program unique cards</legend>
             <div *ngFor="let card of programUniqueCards">{{formatCardRank(card)}}</div>
         </fieldset>
-        
+
 
 
     </section>
-    <section class="chat-window" #scroll>
-        <article *ngFor="let message of messages" [class]="message.class">{{message.text}}</article>
-    </section>
+        <section id="messages">
+            <article *ngFor="let message of messages" [class]="message.class">
+                <span class="text">{{message.text}}</span>
+            </article>
+        </section>
 </main>
