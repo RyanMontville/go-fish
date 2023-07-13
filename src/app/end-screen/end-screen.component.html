@@ -1,11 +1,13 @@
 <main>
     <h3>{{outcomeMessage}}</h3>
     <fieldset>
-        <legend>User Pairs</legend>
+        <legend>Your pairs - {{userPairs.length}}</legend>
         <span *ngFor="let pair of userPairs">{{formatCardRank(pair)}}</span>
     </fieldset>
     <fieldset>
-        <legend>Program Pairs</legend>
+        <legend>The computer's pairs - {{programPairs.length}}</legend>
         <span *ngFor="let pair of programPairs">{{formatCardRank(pair)}}</span>
     </fieldset>
+    <button class="btn green" routerLink="/game">Play Again</button>
+    <button class="btn blue" routerLink="/">Go Home</button>
 </main>

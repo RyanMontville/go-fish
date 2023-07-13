@@ -54,6 +54,7 @@ export class GameScreenComponent implements OnInit {
       this.addMessage('right', 'I got 4 ' + this.formatCardRank(card.getRank()) + 's')
       this.userUniqueCards = this.userUniqueCards.filter(rank => rank != card.getRank());
     }
+    this.userUniqueCards = this.userUniqueCards.sort(function(a,b){return a-b;});
     this.cardsRemainingInDeck = this.deck.getDeckSize();
   }
 
@@ -67,6 +68,7 @@ export class GameScreenComponent implements OnInit {
       this.addMessage('left', 'I got 4 ' + this.formatCardRank(card.getRank()) + 's')
       this.programUniqueCards = this.programUniqueCards.filter(rank => rank != card.getRank());
     }
+    this.programUniqueCards = this.programUniqueCards.sort(function(a,b){return a-b;});
     this.cardsRemainingInDeck = this.deck.getDeckSize();
   }
 
