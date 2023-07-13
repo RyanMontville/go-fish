@@ -1,15 +1,17 @@
 <main>
     <section id="stats">
-        <span *ngIf="cardsRemainingInDeck>0">{{cardsRemainingInDeck}} cards remaining to fish from. | </span>
-        <span *ngIf="cardsRemainingInDeck===0">There are no cards left to fish from. | </span>
-        <span *ngIf="gameOver">GAME OVER</span> {{gameOver}} |
-        <span>User Hand: {{userHand.length}} | </span>
+        <span *ngIf="cardsRemainingInDeck>0">{{cardsRemainingInDeck}} cards remaining to fish from.</span>
+        <span *ngIf="cardsRemainingInDeck===0">There are no cards left to fish from.</span>
+        <span *ngIf="gameOver">GAME OVER</span> {{gameOver}}
+        <span>User Hand: {{userHand.length}}</span>
         <span>Program Hand: {{programHand.length}}</span>
-        <span>| {{playerTurn}}</span>
+        <span>{{playerTurn}}</span>
+        <span>UP: {{userPairs.length}}</span>
+        <span>PP: {{programPairs.length}}</span>
     </section>
     <section id="player">
-        <h3>Your cards</h3>
-        <section id="user-hand">
+        <h3 *ngIf="userHand.length!==0">Your cards</h3>
+        <section id="user-hand" *ngIf="userHand.length!==0">
             <div *ngFor="let card of userHand" [ngClass]="checkSuit(card.getSuit())">
                 <span class="top">{{formatCardRank(card.getRank())}}</span>
                 <span class="suit">{{card.getSuit()}}</span>
@@ -22,8 +24,11 @@
             <button *ngFor="let card of userUniqueCards" (click)="userAsk(card)" class="btn">Got any
                 {{formatCardRank(card)}}s?</button>
         </article>
+        <button class="btn green" (click)="userDrawCard()" *ngIf="userHand.length===0 && playerTurn === 'user'">Draw a card</button>
+        <button class="btn green" (click)="userDrawCard()" *ngIf="showDrawButton">Go fish</button>
+        
         <article *ngIf="playerTurn==='program'">
-            <h3>Respond to the computer</h3>
+            <h3>{{programMessage}}</h3>
             <button *ngIf="userHasCardProgramIsAskingFor" class="btn green" (click)="userResponse()">Yes</button>
             <button *ngIf="!userHasCardProgramIsAskingFor" class="btn red-btn" (click)="userResponse()">No, go
                 fish</button>

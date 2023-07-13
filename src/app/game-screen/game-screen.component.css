@@ -9,6 +9,8 @@ main {
 /******************* Stats *********************************/
 #stats {
     grid-area: stats;
+    display: flex;
+    justify-content: space-between;
 }
 /******************* User **********************************/
 #player {
