@@ -1,6 +1,7 @@
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { Deck, PlayingCard } from '../deck.model';
 import { Route, Router } from '@angular/router';
+import { GameService } from '../game.service';
 
 @Component({
   selector: 'app-game-screen',
@@ -27,7 +28,7 @@ export class GameScreenComponent implements OnInit {
   programsLastChoice: number = 0;
   programMessage: string = '';
 
-  constructor(private router: Router) { }
+  constructor(private router: Router, private gameService: GameService) { }
 
   ngOnInit() {
     this.addMessage('left', 'The game has started!')
@@ -194,12 +195,18 @@ export class GameScreenComponent implements OnInit {
   checkIfGameIsOver() {
     if(this.programHand.length===0 && this.userHand.length===0){
       this.gameOver = true;
+      this.gameService.setProgramPairs(this.programPairs);
+      this.gameService.setUserPairs(this.userPairs);
       this.router.navigate(['/game-over']);
     } else if(this.userUniqueCards.length===0 && this.programUniqueCards.length===0) {
       this.gameOver = true;
+      this.gameService.setProgramPairs(this.programPairs);
+      this.gameService.setUserPairs(this.userPairs);
       this.router.navigate(['/game-over']);
     } else if(this.programPairs.length + this.userPairs.length === 13) {
       this.gameOver = true;
+      this.gameService.setProgramPairs(this.programPairs);
+      this.gameService.setUserPairs(this.userPairs);
       this.router.navigate(['/game-over']);
     }
     this.cardsRemainingInDeck = this.deck.getDeckSize();

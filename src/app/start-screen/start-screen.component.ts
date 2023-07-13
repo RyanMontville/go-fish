@@ -12,7 +12,6 @@ export class StartScreenComponent {
   constructor(private gameService: GameService, private router: Router) {}
 
   start() {
-    this.gameService.startGame();
     this.router.navigate(['/game']);
   }
 }

@@ -1,1 +1,11 @@
-<p>end-screen works!</p>
+<main>
+    <h3>{{outcomeMessage}}</h3>
+    <fieldset>
+        <legend>User Pairs</legend>
+        <span *ngFor="let pair of userPairs">{{formatCardRank(pair)}}</span>
+    </fieldset>
+    <fieldset>
+        <legend>Program Pairs</legend>
+        <span *ngFor="let pair of programPairs">{{formatCardRank(pair)}}</span>
+    </fieldset>
+</main>

@@ -1,0 +1,12 @@
+fieldset {
+    margin: 5px;
+    border-radius: 10px;
+}
+
+fieldset legend {
+    margin-left: 10px;
+}
+
+fieldset span {
+    margin: 10px;
+}
