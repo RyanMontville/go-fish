@@ -54,7 +54,7 @@ export class GameScreenComponent implements OnInit {
       this.addMessage('right', 'I got 4 ' + this.formatCardRank(card.getRank()) + 's')
       this.userUniqueCards = this.userUniqueCards.filter(rank => rank != card.getRank());
     }
-    this.userUniqueCards = this.userUniqueCards.sort(function(a,b){return a-b;});
+    this.userUniqueCards = this.userUniqueCards.sort(function (a, b) { return a - b; });
     this.cardsRemainingInDeck = this.deck.getDeckSize();
   }
 
@@ -68,7 +68,7 @@ export class GameScreenComponent implements OnInit {
       this.addMessage('left', 'I got 4 ' + this.formatCardRank(card.getRank()) + 's')
       this.programUniqueCards = this.programUniqueCards.filter(rank => rank != card.getRank());
     }
-    this.programUniqueCards = this.programUniqueCards.sort(function(a,b){return a-b;});
+    this.programUniqueCards = this.programUniqueCards.sort(function (a, b) { return a - b; });
     this.cardsRemainingInDeck = this.deck.getDeckSize();
   }
 
@@ -112,29 +112,35 @@ export class GameScreenComponent implements OnInit {
 
   userAsk(card: number) {
     this.checkIfGameIsOver();
-    if(!this.gameOver) {
-      this.addMessage('right', 'Got any ' + this.formatCardRank(card) + 's?');
-    let matches: PlayingCard[] = this.programHand.filter(currentCard => currentCard.getRank() === card);
-    if (matches.length > 0) {
-      this.addMessage('left', 'Yes, I have ' + matches.length)
-      for (let i = 0; i < matches.length; i++) {
-        this.addCardToUserHand(matches[i]);
-        this.programHand = this.programHand.filter(matchCard => matchCard.getCard() != matches[i].getCard());
-        this.programUniqueCards = this.programUniqueCards.filter(uniqueMatch => uniqueMatch != card);
+    if (!this.gameOver) {
+      if (this.programHand.length === 0) {
+        this.addMessage('left', "I don't have any cards left.");
+        this.showDrawButton = true;
+      } else {
+        this.addMessage('right', 'Got any ' + this.formatCardRank(card) + 's?');
+        let matches: PlayingCard[] = this.programHand.filter(currentCard => currentCard.getRank() === card);
+        if (matches.length > 0) {
+          this.addMessage('left', 'Yes, I have ' + matches.length)
+          for (let i = 0; i < matches.length; i++) {
+            this.addCardToUserHand(matches[i]);
+            this.programHand = this.programHand.filter(matchCard => matchCard.getCard() != matches[i].getCard());
+            this.programUniqueCards = this.programUniqueCards.filter(uniqueMatch => uniqueMatch != card);
+          }
+        } else {
+          this.addMessage('left', 'No, go fish.');
+          this.playerTurn = '';
+          this.showDrawButton = true;
+        }
       }
-    } else {
-      this.addMessage('left', 'No, go fish.');
-      this.playerTurn = '';
-      this.showDrawButton = true;
-    }
-    this.cardsRemainingInDeck = this.deck.getDeckSize();
+
+      this.cardsRemainingInDeck = this.deck.getDeckSize();
     }
     this.checkIfGameIsOver();
   }
 
   programAsk() {
     this.checkIfGameIsOver();
-    if(this.programHand.length == 0) {
+    if (this.programHand.length == 0) {
       if (this.cardsRemainingInDeck > 0) {
         this.addCardToProgramHand(this.deck.drawCard());
       } else {
@@ -142,20 +148,26 @@ export class GameScreenComponent implements OnInit {
         this.router.navigate(['/game-over']);
       }
     } else {
-      let min = Math.ceil(0);
-    let max = Math.floor(this.programUniqueCards.length - 1);
-    let randomNumber: number = Math.floor(Math.random() * (max - min) + min);
-    let card = this.programUniqueCards[randomNumber];
-    this.programChoice = card;
-    this.addMessage('left', 'Got any ' + this.formatCardRank(this.programChoice) + 's?');
-    this.programMessage = 'Got any ' + this.formatCardRank(this.programChoice) + 's?';
-    let userMatch: PlayingCard[] = this.userHand.filter(currentCard => currentCard.getRank() === this.programChoice);
-    if (userMatch.length > 0) {
-      this.userHasCardProgramIsAskingFor = true;
-    } else {
-      this.userHasCardProgramIsAskingFor = false;
-    }
-    this.cardsRemainingInDeck = this.deck.getDeckSize();
+      if (this.userHand.length === 0) {
+        this.addMessage('right', "I don't have any cards left.");
+        this.addMessage('left', "Ok, I'll draw a card then.");
+        this.addCardToProgramHand(this.deck.drawCard());
+      } else {
+        let min = Math.ceil(0);
+        let max = Math.floor(this.programUniqueCards.length - 1);
+        let randomNumber: number = Math.floor(Math.random() * (max - min) + min);
+        let card = this.programUniqueCards[randomNumber];
+        this.programChoice = card;
+        this.addMessage('left', 'Got any ' + this.formatCardRank(this.programChoice) + 's?');
+        this.programMessage = 'Got any ' + this.formatCardRank(this.programChoice) + 's?';
+        let userMatch: PlayingCard[] = this.userHand.filter(currentCard => currentCard.getRank() === this.programChoice);
+        if (userMatch.length > 0) {
+          this.userHasCardProgramIsAskingFor = true;
+        } else {
+          this.userHasCardProgramIsAskingFor = false;
+        }
+      }
+      this.cardsRemainingInDeck = this.deck.getDeckSize();
     }
     this.checkIfGameIsOver();
   }
@@ -183,11 +195,11 @@ export class GameScreenComponent implements OnInit {
   }
 
   userDrawCard() {
-    if(this.cardsRemainingInDeck>0) {
+    if (this.cardsRemainingInDeck > 0) {
       this.addCardToUserHand(this.deck.drawCard());
     }
     this.cardsRemainingInDeck = this.deck.getDeckSize();
-    if(this.showDrawButton) {
+    if (this.showDrawButton) {
       this.showDrawButton = false;
       this.playerTurn = 'program';
       this.programAsk();
@@ -195,17 +207,17 @@ export class GameScreenComponent implements OnInit {
   }
 
   checkIfGameIsOver() {
-    if(this.programHand.length===0 && this.userHand.length===0){
+    if (this.programHand.length === 0 && this.userHand.length === 0) {
       this.gameOver = true;
       this.gameService.setProgramPairs(this.programPairs);
       this.gameService.setUserPairs(this.userPairs);
       this.router.navigate(['/game-over']);
-    } else if(this.userUniqueCards.length===0 && this.programUniqueCards.length===0) {
+    } else if (this.userUniqueCards.length === 0 && this.programUniqueCards.length === 0) {
       this.gameOver = true;
       this.gameService.setProgramPairs(this.programPairs);
       this.gameService.setUserPairs(this.userPairs);
       this.router.navigate(['/game-over']);
-    } else if(this.programPairs.length + this.userPairs.length === 13) {
+    } else if (this.programPairs.length + this.userPairs.length === 13) {
       this.gameOver = true;
       this.gameService.setProgramPairs(this.programPairs);
       this.gameService.setUserPairs(this.userPairs);

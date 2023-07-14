@@ -4,7 +4,7 @@
         <legend>Your pairs - {{userPairs.length}}</legend>
         <span *ngFor="let pair of userPairs">{{formatCardRank(pair)}}</span>
     </fieldset>
-    <fieldset>
+    <fieldset *ngIf="programPairs.length>0">
         <legend>The computer's pairs - {{programPairs.length}}</legend>
         <span *ngFor="let pair of programPairs">{{formatCardRank(pair)}}</span>
     </fieldset>

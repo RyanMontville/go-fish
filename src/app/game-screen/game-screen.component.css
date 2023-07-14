@@ -127,3 +127,15 @@ article {
     border-radius: 15px 15px 0 15px;
     text-align: right;
 }
+
+@media (max-width: 870px) {
+    main {
+        display: grid;
+        grid-template-columns: 1fr;
+        grid-template-areas:
+            "stats"
+            "player"
+            "messages"
+        ;
+    }
+}

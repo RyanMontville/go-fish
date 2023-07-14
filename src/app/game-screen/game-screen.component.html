@@ -18,12 +18,18 @@
         <article *ngIf="playerTurn==='user'">
             <h3 *ngIf="userHand.length!==0">Ask the computer</h3>
             <h3 *ngIf="userHand.length===0">You are out of cards, but it's still your turn, so draw a card.</h3>
-            <button *ngFor="let card of userUniqueCards" (click)="userAsk(card)" class="btn">Got any
-                {{formatCardRank(card)}}s?</button>
+            <div *ngIf="!showDrawButton">
+                <button *ngFor="let card of userUniqueCards" (click)="userAsk(card)" class="btn">Got any
+                    {{formatCardRank(card)}}s?</button>
+            </div>
         </article>
-        <button class="btn green" (click)="userDrawCard()" *ngIf="userHand.length===0 && playerTurn === 'user'">Draw a card</button>
-        <button class="btn green" (click)="userDrawCard()" *ngIf="showDrawButton">Go fish</button>
-        
+        <article>
+            <h3 *ngIf="showDrawButton">Go Fish</h3>
+            <button class="btn green" (click)="userDrawCard()" *ngIf="userHand.length===0 && playerTurn === 'user'">Draw
+                a card</button>
+            <button class="btn green" (click)="userDrawCard()" *ngIf="showDrawButton">Draw a card</button>
+        </article>
+
         <article *ngIf="playerTurn==='program'">
             <h3>{{programMessage}}</h3>
             <button *ngIf="userHasCardProgramIsAskingFor" class="btn green" (click)="userResponse()">Yes</button>
@@ -43,9 +49,9 @@
 
 
     </section>
-        <section id="messages">
-            <article *ngFor="let message of messages" [class]="message.class">
-                <span class="text">{{message.text}}</span>
-            </article>
-        </section>
+    <section id="messages">
+        <article *ngFor="let message of messages" [class]="message.class">
+            <span class="text">{{message.text}}</span>
+        </article>
+    </section>
 </main>
