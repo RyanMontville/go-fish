@@ -4,6 +4,6 @@ An Angular app of the card game Go Fish. Following the rules of the game by [Bic
 [Click here](https://www.ryanmontville.com/go-fish/) to play the game.
 
 <div>
-  <img src="https://github.com/RyanMontville/go-fish/blob/main/screenshots/game-screen.png" alt="game screen" title="game screen" style="width: 20%; display: inline-block;"></img>
-  <img src="https://github.com/RyanMontville/go-fish/blob/main/screenshots/mobile.png" alt="the game on mobile" title="the game on mobile" style="width: 20%; display: inline-block;"></img>
+  <img src="https://github.com/RyanMontville/go-fish/blob/main/screenshots/game-screen.png" alt="game screen" title="game screen" style="width: 40%; display: inline-block;"></img>
+  <img src="https://github.com/RyanMontville/go-fish/blob/main/screenshots/mobile.png" alt="the game on mobile" title="the game on mobile" style="width: 7%; display: inline-block;"></img>
 </div>
