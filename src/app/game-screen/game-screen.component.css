@@ -30,6 +30,8 @@ main {
     display: inline-block;
     position: relative;
     margin: 5px;
+    background-color: white;
+    color: black;
 }
 
 .top,
@@ -124,6 +126,7 @@ article {
 .right {
     margin-left: auto;
     background-color: #eaeaea;
+    color: black;
     border-radius: 15px 15px 0 15px;
     text-align: right;
 }
@@ -133,9 +136,15 @@ article {
         display: grid;
         grid-template-columns: 1fr;
         grid-template-areas:
+            "messages"
             "stats"
             "player"
-            "messages"
         ;
+    }
+    #messages {
+        height: 150px;
+    }
+    #stats {
+        display: none;
     }
 }

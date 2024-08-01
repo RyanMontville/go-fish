@@ -1,18 +1,24 @@
 import { Component, OnInit } from '@angular/core';
+import { HeaderComponent } from "../header/header.component";
+import { Router, RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
 import { GameService } from '../game.service';
-import { Router } from '@angular/router';
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-end-screen',
+  standalone: true,
+  imports: [HeaderComponent, CommonModule, RouterOutlet, RouterLink, RouterLinkActive],
   templateUrl: './end-screen.component.html',
-  styleUrls: ['./end-screen.component.css']
+  styleUrl: './end-screen.component.css'
 })
 export class EndScreenComponent implements OnInit {
   programPairs: number[] = [];
   userPairs: number[] = [];
   outcomeMessage: string = '';
 
-  constructor(private router: Router, private gameService: GameService) { }
+  constructor(
+    private router: Router, 
+    private gameService: GameService) { }
 
   ngOnInit() {
     this.programPairs = this.gameService.getProgramPairs();
@@ -37,5 +43,4 @@ export class EndScreenComponent implements OnInit {
       default: return '' + rank + '';
     }
   }
-
 }

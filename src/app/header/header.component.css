@@ -1,0 +1,31 @@
+.navbar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 10px;
+    background-color: var(--header-background);
+    color: var(--header-color);
+    margin: 10px;
+    border-radius: 10px;
+    font-family: 'Roboto', sans-serif;
+}
+
+nav a {
+    cursor: pointer;
+    text-decoration: none;
+    color: var(--header-color);
+    margin: 0 10px;
+    font-size: 20px;
+}
+
+nav a:hover {
+    text-decoration: underline;
+}
+
+
+.logo,
+.logo a {
+    font-size: 1.5rem;
+    color: var(--header-color);
+    text-decoration: none;
+}

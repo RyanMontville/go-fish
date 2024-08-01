@@ -1,0 +1,21 @@
+<nav class="navbar">
+    <div class="logo">
+        <a href="https://ryanmontville.com">Ryan Montville</a> | <a routerLink="/">Go Fish</a></div>
+        <div class="material-symbols-outlined menu-btn" (click)="showMenu = !showMenu">menu</div>
+        <div class="larger-screens">
+            <a routerLink="/">Home</a>
+            <a routerLink="/game">Game</a>
+            <a href="https://github.com/RyanMontville/go-fish"><i class="fa-brands fa-github"></i> GitHub Repo</a>
+            <a href="https://www.linkedin.com/in/ryanmontville" title="LinkedIn" target="blank"><i
+                        class="fa-brands fa-linkedin-in"></i> LinkedIn</a>
+        </div>
+</nav>
+@if (showMenu) {
+    <div id="mobile-menu">
+        <a routerLink="/">Home</a>
+        <a routerLink="/game">Game</a>
+        <a href="https://github.com/RyanMontville/go-fish"><i class="fa-brands fa-github"></i> GitHub Repo</a>
+        <a href="https://www.linkedin.com/in/ryanmontville" title="LinkedIn" target="blank"><i
+            class="fa-brands fa-linkedin-in"></i> LinkedIn</a>
+    </div>
+}

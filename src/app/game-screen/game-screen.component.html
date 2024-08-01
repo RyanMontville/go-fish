@@ -1,57 +1,80 @@
+<app-header />
 <main>
     <section id="stats">
-        <span *ngIf="cardsRemainingInDeck>0">{{cardsRemainingInDeck}} cards remaining to fish from.</span>
-        <span *ngIf="cardsRemainingInDeck===0">There are no cards left to fish from.</span>
+        @if (cardsRemainingInDeck > 0) {
+        <span>{{cardsRemainingInDeck}} cards remaining to fish from.</span>
+        }
+        @if (cardsRemainingInDeck === 0) {
+        <span>There are no cards left to fish from.</span>
+        }
         <span>Your Hand: {{userHand.length}}</span>
         <span>Computer's Hand: {{programHand.length}}</span>
     </section>
     <section id="player">
-        <h3 *ngIf="userHand.length!==0">Your cards</h3>
-        <section id="user-hand" *ngIf="userHand.length!==0">
-            <div *ngFor="let card of userHand" [ngClass]="checkSuit(card.getSuit())">
+        @if (userHand.length !== 0) {
+        <h3>Your cards</h3>
+        <section id="user-hand">
+            @for (card of userHand; track card) {
+            <div [ngClass]="checkSuit(card.getSuit())">
                 <span class="top">{{formatCardRank(card.getRank())}}</span>
                 <span class="suit">{{card.getSuit()}}</span>
                 <span class="bottom">{{formatCardRank(card.getRank())}}</span>
             </div>
+            }
         </section>
+        }
         <hr />
-        <article *ngIf="playerTurn==='user'">
-            <h3 *ngIf="userHand.length!==0">Ask the computer</h3>
-            <h3 *ngIf="userHand.length===0">You are out of cards, but it's still your turn, so draw a card.</h3>
-            <div *ngIf="!showDrawButton">
-                <button *ngFor="let card of userUniqueCards" (click)="userAsk(card)" class="btn">Got any
-                    {{formatCardRank(card)}}s?</button>
-            </div>
-        </article>
+        @if (playerTurn === 'user') {
         <article>
-            <h3 *ngIf="showDrawButton">Go Fish</h3>
-            <button class="btn green" (click)="userDrawCard()" *ngIf="userHand.length===0 && playerTurn === 'user'">Draw
-                a card</button>
-            <button class="btn green" (click)="userDrawCard()" *ngIf="showDrawButton">Draw a card</button>
+            @if (userHand.length === 0) {
+            <h3>You are out of cards, but it's still your turn, so draw a card.</h3>
+            <button class="btn green" (click)="userDrawCard()">Go Fish</button>
+            }
+            @if (!showDrawButton) {
+            @for (card of userUniqueCards; track card) {
+            <button (click)="userAsk(card)" class="btn">Got any {{formatCardRank(card)}}s?</button>
+            }
+            }
         </article>
-
-        <article *ngIf="playerTurn==='program'">
-            <h3>{{programMessage}}</h3>
-            <button *ngIf="userHasCardProgramIsAskingFor" class="btn green" (click)="userResponse()">Yes</button>
-            <button *ngIf="!userHasCardProgramIsAskingFor" class="btn red-btn" (click)="userResponse()">No, go
-                fish</button>
+        }
+        <article>
+            @if (showDrawButton) {
+            <button class="btn green" (click)="userDrawCard()">Go Fish</button>
+            }
         </article>
+        @if (playerTurn === 'program') {
+            <article>
+                @if (userHasCardProgramIsAskingFor) {
+                    <button class="btn green" (click)="userResponse()">Yes</button>
+                }
+                @if (!userHasCardProgramIsAskingFor) {
+                    <button class="btn red-btn" (click)="userResponse()">No, go fish</button>
+                }
+            </article>
+        }
         <hr />
-        <fieldset *ngIf="userPairs.length!==0">
-            <legend>Your pairs - {{userPairs.length}}</legend>
-            <span *ngFor="let card of userPairs">{{formatCardRank(card)}}</span>
-        </fieldset>
-        <fieldset *ngIf="programPairs.length!==0">
-            <legend>The computer's pairs - {{programPairs.length}}</legend>
-            <span *ngFor="let card of programPairs">{{formatCardRank(card)}}</span>
-        </fieldset>
-
-
-
+        @if (userPairs.length !== 0) {
+            <fieldset>
+                <legend>Your pairs - {{userPairs.length}}</legend>
+                @for (card of userPairs; track card) {
+                    <span>{{formatCardRank(card)}}</span>
+                }
+            </fieldset>
+        }
+        @if (programPairs.length !== 0) {
+            <fieldset>
+                <legend>The computer's pairs - {{programPairs.length}}</legend>
+                @for (card of programPairs; track card) {
+                    <span>{{formatCardRank(card)}}</span>
+                }
+            </fieldset>
+        }
     </section>
     <section id="messages">
-        <article *ngFor="let message of messages" [class]="message.class">
-            <span class="text">{{message.text}}</span>
-        </article>
+        @for (message of messages; track message) {
+            <article [class]="message.class">
+                <span class="text">{{message.text}}</span>
+            </article>
+        }
     </section>
 </main>

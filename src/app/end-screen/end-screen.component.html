@@ -1,13 +1,20 @@
+<app-header />
 <main>
     <h3>{{outcomeMessage}}</h3>
     <fieldset>
         <legend>Your pairs - {{userPairs.length}}</legend>
-        <span *ngFor="let pair of userPairs">{{formatCardRank(pair)}}</span>
+        @for (pair of userPairs; track pair) {
+            <span>{{formatCardRank(pair)}}</span>
+        }
     </fieldset>
-    <fieldset *ngIf="programPairs.length>0">
-        <legend>The computer's pairs - {{programPairs.length}}</legend>
-        <span *ngFor="let pair of programPairs">{{formatCardRank(pair)}}</span>
-    </fieldset>
+    @if (programPairs.length>0) {
+        <fieldset>
+            <legend>The computer's pairs - {{programPairs.length}}</legend>
+            @for (pair of programPairs; track pair) {
+                <span>{{formatCardRank(pair)}}</span>
+            }
+        </fieldset>
+    }
     <button class="btn green" routerLink="/game">Play Again</button>
     <button class="btn blue" routerLink="/">Go Home</button>
 </main>

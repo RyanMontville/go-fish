@@ -1,12 +1,16 @@
-import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
+import { HeaderComponent } from "../header/header.component";
 import { Deck, PlayingCard } from '../deck.model';
-import { Route, Router } from '@angular/router';
+import { Router } from '@angular/router';
+import { CommonModule } from '@angular/common';
 import { GameService } from '../game.service';
 
 @Component({
   selector: 'app-game-screen',
+  standalone: true,
+  imports: [HeaderComponent, CommonModule ],
   templateUrl: './game-screen.component.html',
-  styleUrls: ['./game-screen.component.css']
+  styleUrl: './game-screen.component.css'
 })
 export class GameScreenComponent implements OnInit {
   deck: Deck = new Deck;
@@ -28,10 +32,11 @@ export class GameScreenComponent implements OnInit {
   programsLastChoice: number = 0;
   programMessage: string = '';
 
-  constructor(private router: Router, private gameService: GameService) { }
-
-  ngOnInit() {
-    this.addMessage('left', 'The game has started!')
+  constructor(
+    private router: Router,
+    private gameService: GameService) { }
+  
+  ngOnInit(): void {
     this.deck.generateDeck();
     for (let i = 0; i < 7; i++) {
       let cardOne: PlayingCard = this.deck.drawCard();
@@ -40,7 +45,15 @@ export class GameScreenComponent implements OnInit {
       this.programHand.push(cardTwo);
       this.checkProgramUniqueCards(cardTwo.getRank());
     }
-    this.playerTurn = 'user';
+    this.addMessage('left', "I'll flip a coin to see who goes first.");
+    if(Math.random() < 0.5) {
+      this.addMessage('left', "Heads, You go first.");
+      this.playerTurn = 'user';
+    } else {
+      this.addMessage('left', "Tails, I'll go first.");
+      this.playerTurn = 'program';
+      this.programAsk();
+    }
     this.cardsRemainingInDeck = this.deck.getDeckSize();
   }
 
@@ -225,5 +238,6 @@ export class GameScreenComponent implements OnInit {
     }
     this.cardsRemainingInDeck = this.deck.getDeckSize();
   }
+
 
 }
