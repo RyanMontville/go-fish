@@ -8,7 +8,7 @@ import { GameService } from '../game.service';
 @Component({
   selector: 'app-game-screen',
   standalone: true,
-  imports: [HeaderComponent, CommonModule ],
+  imports: [HeaderComponent, CommonModule],
   templateUrl: './game-screen.component.html',
   styleUrl: './game-screen.component.css'
 })
@@ -31,11 +31,12 @@ export class GameScreenComponent implements OnInit {
   programChoice: number = 0;
   programsLastChoice: number = 0;
   programMessage: string = '';
+  remeberCardsUserAskedFor: number[] = [];
 
   constructor(
     private router: Router,
     private gameService: GameService) { }
-  
+
   ngOnInit(): void {
     this.deck.generateDeck();
     for (let i = 0; i < 7; i++) {
@@ -46,7 +47,7 @@ export class GameScreenComponent implements OnInit {
       this.checkProgramUniqueCards(cardTwo.getRank());
     }
     this.addMessage('left', "I'll flip a coin to see who goes first.");
-    if(Math.random() < 0.5) {
+    if (Math.random() < 0.5) {
       this.addMessage('left', "Heads, You go first.");
       this.playerTurn = 'user';
     } else {
@@ -130,6 +131,9 @@ export class GameScreenComponent implements OnInit {
         this.addMessage('left', "I don't have any cards left.");
         this.showDrawButton = true;
       } else {
+        if (!this.remeberCardsUserAskedFor.includes(card)) {
+          this.remeberCardsUserAskedFor.push(card);
+        }
         this.addMessage('right', 'Got any ' + this.formatCardRank(card) + 's?');
         let matches: PlayingCard[] = this.programHand.filter(currentCard => currentCard.getRank() === card);
         if (matches.length > 0) {
@@ -166,11 +170,46 @@ export class GameScreenComponent implements OnInit {
         this.addMessage('left', "Ok, I'll draw a card then.");
         this.addCardToProgramHand(this.deck.drawCard());
       } else {
-        let min = Math.ceil(0);
-        let max = Math.floor(this.programUniqueCards.length - 1);
-        let randomNumber: number = Math.floor(Math.random() * (max - min) + min);
-        let card = this.programUniqueCards[randomNumber];
-        this.programChoice = card;
+        let matches: number[] = []
+        this.programHand.forEach(card => {
+          let matchFilter = this.remeberCardsUserAskedFor.filter(remCard => {
+            return remCard === card.getRank();
+          });
+          if (matchFilter.length > 0) {
+            matches.push(card.getRank());
+          }
+        });
+        if (matches.length > 0) {
+          let min = Math.ceil(0);
+          let max = Math.floor(matches.length - 1);
+          let randomNumber: number = Math.floor(Math.random() * (max - min) + min);
+          let card = matches[randomNumber];
+          this.programChoice = card;
+          this.remeberCardsUserAskedFor = this.remeberCardsUserAskedFor.filter(e => e !== card);
+        } else {
+          let uniqueElements = new Set();
+          let duplicates: number[] = [];
+          this.programHand.forEach(card => {
+            if (uniqueElements.has(card.getRank())) {
+              duplicates.push(card.getRank());
+            } else {
+              uniqueElements.add(card.getRank());
+            }
+          });
+          if (duplicates.length > 0) {
+            let min = Math.ceil(0);
+            let max = Math.floor(duplicates.length - 1);
+            let randomNumber: number = Math.floor(Math.random() * (max - min) + min);
+            let card = duplicates[randomNumber];
+            this.programChoice = card;
+          } else {
+            let min = Math.ceil(0);
+            let max = Math.floor(this.programUniqueCards.length - 1);
+            let randomNumber: number = Math.floor(Math.random() * (max - min) + min);
+            let card = this.programUniqueCards[randomNumber];
+            this.programChoice = card;
+          }
+        }
         this.addMessage('left', 'Got any ' + this.formatCardRank(this.programChoice) + 's?');
         this.programMessage = 'Got any ' + this.formatCardRank(this.programChoice) + 's?';
         let userMatch: PlayingCard[] = this.userHand.filter(currentCard => currentCard.getRank() === this.programChoice);

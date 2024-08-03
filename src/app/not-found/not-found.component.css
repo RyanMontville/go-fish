@@ -1,0 +1,51 @@
+h2 {
+    text-align: center;
+    font-size: 30px;
+}
+#container {
+    display: flex;
+    justify-content: center;
+}
+
+.card {
+    width: 135px;
+    height: 200px;
+    border-radius: 10px;
+    border: 1px solid black;
+    display: inline-block;
+    position: relative;
+    margin: 5px;
+    background-color: white;
+    color: black;
+    font-size: 20px;
+}
+
+.top,
+.suit,
+.bottom {
+    position: absolute;
+}
+
+.top {
+    top: 5px;
+    left: 5px;
+}
+
+.bottom {
+    bottom: 5px;
+    right: 5px;
+}
+
+.suit {
+    top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-size: 40px;
+}
+
+@media only screen and (max-width: 380px) {
+    #container {
+        flex-direction: column;
+        align-items: center;
+    }
+}
